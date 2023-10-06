@@ -1,11 +1,13 @@
 from sqlalchemy import select
 from polestar.models import models
+
 URL = '/ships'
 
 
 def get_all_ships(session):
     query = select(models.ships)
     output = session.execute(query).fetchall()
+    session.close()
     result = []
     for ship in output:
         data = {

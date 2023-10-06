@@ -47,6 +47,12 @@ def test_get_all_ships(postgresql_engine, db_session):
 def test_get_ship_position(postgresql_engine, db_session):
     # Example test case for get_ship_position function
     db_session.execute(models.locations.delete())
+    expected_ships = [
+        {"IMO_number": 123456, "ship_name": "Ship1", "create_ts": datetime.utcnow(), "update_ts": datetime.utcnow()},
+        {"IMO_number": 567891, "ship_name": "Ship2", "create_ts": datetime.utcnow(), "update_ts": datetime.utcnow()},
+    ]
+    db_session.execute(models.ships.insert().values(expected_ships))
+
     sample_data = [
         {"id":uuid.uuid4(), "IMO_number": 123456, "timestamp": "2023-01-01 12:00:00", "latitude": 10.0, "longitude": 20.0},
         {"id":uuid.uuid4(), "IMO_number": 123456, "timestamp": "2023-01-01 13:00:00", "latitude": 11.0, "longitude": 21.0},

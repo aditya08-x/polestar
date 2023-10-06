@@ -9,6 +9,7 @@ def get_help_status():
     session = SQL_SESSION()
     query = select(models.ships)
     output = session.execute(query).fetchone()
+    session.close()
     if output:
         return "Health is good"
     else:

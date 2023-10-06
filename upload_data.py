@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Table, Column, MetaData, NUMERIC, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID
+from sqlalchemy import create_engine, Table, Column, MetaData, NUMERIC, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 from datetime import datetime
@@ -13,7 +13,7 @@ metadata = MetaData()
 ships = Table(
     'ships',
     metadata,
-    Column('IMO_number', NUMERIC, primary_key=True),
+    Column('IMO_number', Integer, primary_key=True),
     Column('ship_name', VARCHAR(255), nullable=False),
     Column('create_ts', TIMESTAMP, nullable=False),
     Column('update_ts', TIMESTAMP, nullable=False)
@@ -24,7 +24,7 @@ locations = Table(
     'locations',
     metadata,
     Column('id', UUID(as_uuid=True), primary_key=True),
-    Column('IMO_number', NUMERIC),
+    Column('IMO_number', Integer, ForeignKey("ships.IMO_number"), nullable=False),
     Column('timestamp', TIMESTAMP, nullable=False),
     Column('latitude', DECIMAL, nullable=False),
     Column('longitude', DECIMAL, nullable=False)
@@ -72,8 +72,6 @@ def add_data_in_loc(engine, data):
         latitude = row['latitude']
         longitude = row['longitude']
         timestamp_string = row['timestamp']
-        # timestamp_string_without_colon = timestamp_string[:-3] + timestamp_string[-2:]
-        # # timestamp = datetime.strptime(timestamp_string_without_colon, '%Y-%m-%d %H:%M:%S%z')
         timestamp = parser.parse(timestamp_string)
         ins = locations.insert().values(id=uuid.uuid4(), IMO_number=IMO_number, latitude=latitude, longitude=longitude,
                                     timestamp=timestamp)

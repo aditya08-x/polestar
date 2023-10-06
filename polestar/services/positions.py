@@ -8,6 +8,7 @@ SQL_SESSION = None
 def get_ship_position(session, imo):
     query = select(models.locations).where(models.locations.c.IMO_number == imo).order_by(desc(models.locations.c.timestamp))
     output = session.execute(query).fetchall()
+    session.close()
     result = []
     for ship in output:
         data = {
