@@ -1,55 +1,62 @@
 # Polestar
-This repo is for all the Polstar Api service
 
-# Installation
+This repository contains all the Polestar API services.
 
-Install a **python 3.7** environment and create a virtual environment using 
+## Installation
 
-`python -m venv env-name`
+1. Install a **Python 3.7** environment.
+2. Create a virtual environment using:
 
-Install all requirements by Running.
+    ```bash
+    python -m venv env-name
+    ```
 
-`pip install --no-cache-dir -r requirements.txt`
+3. Install all requirements by running:
 
-# Prerequisite
+    ```bash
+    pip install --no-cache-dir -r requirements.txt
+    ```
 
-Start a postgres instance at **5433** Port
+## Prerequisite
 
-# Environment variables
+Start a PostgreSQL instance at **5433** Port.
 
-**POSTGRES_USER**      : postgres User Name
-**POSTGRES_PASSWORD**  : postgres password for the user
-**POSTGRES_HOST**      : postgres host by default its **localhost**
-**POSTGRES_PORT**      : postgres port by default its **5433**
-**POSTGRES_DB**        : postgres database name
-**APP_HOST**           : host for application to run by default its **127.0.0.1**
-**APP_PORT**           : port for application by default its **5001**
+## Environment Variables
 
+- **POSTGRES_USER**: PostgreSQL User Name
+- **POSTGRES_PASSWORD**: PostgreSQL password for the user
+- **POSTGRES_HOST**: PostgreSQL host (default: **localhost**)
+- **POSTGRES_PORT**: PostgreSQL port (default: **5433**)
+- **POSTGRES_DB**: PostgreSQL database name
+- **APP_HOST**: Host for the application to run (default: **127.0.0.1**)
+- **APP_PORT**: Port for the application (default: **5001**)
 
-# Loading the data
+## Loading the Data
 
-You can call upload_data.py file to create tables and load all the data in the database using bellow command.
+Run `python3 upload_data.py` to create tables and load all the data into the database.
 
-`python3 upload_data.py`
+## Running Tests
 
+Run **test_database.py** to execute all tests.
 
-# Running tests
+## How to Run
 
-You can run **test_database.py** file to run all tests
+Activate the virtual environment:
 
+```bash
+source venv/bin/activate
+```
 
-# How to Run
-
-Activate the Virtual environment 
-
-`source venv/bin/activate`
-
-To start application you can call main.py file by running bellow command
+To start the application, run:
 
 `python3 main.py`
 
 # Accessing the SWAGGER
 
 http://127.0.0.1:5000/api/polestar/swagger
+
+
+Feel free to adjust any part according to your preferences or specific requirements.
+
 
 

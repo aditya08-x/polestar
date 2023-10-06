@@ -5,8 +5,7 @@ URL = '/health'
 SQL_SESSION = None
 
 
-def get_help_status():
-    session = SQL_SESSION()
+def get_health_status(session):
     query = select(models.ships)
     output = session.execute(query).fetchone()
     session.close()

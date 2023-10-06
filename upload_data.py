@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Table, Column, MetaData, NUMERIC, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID, Integer
+from sqlalchemy import create_engine, Table, Column, MetaData, inspect, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 from datetime import datetime
@@ -31,7 +31,7 @@ locations = Table(
 )
 
 
-def create_engine_postgress():
+def create_engine_postgres():
     postgres_user = 'postgres'
     postgres_password = 'password'
     postgres_host = 'localhost'
@@ -44,15 +44,13 @@ def create_engine_postgress():
     return engine
 
 
-def create_table():
-    engine = create_engine_postgress()
-    # Create all tables in the database
-    metadata.create_all(engine)
+def init_database(engine):
+    inspector = inspect(engine)
+    if not inspector.has_table('ships') or not inspector.has_table('locations'):
+        metadata.create_all(engine)
 
 
-def add_data_in_ships(engine, dic_for_ships):
-    Session = sessionmaker(bind=engine)
-    session = Session()
+def add_data_in_ships(session, dic_for_ships):
     for ship in dic_for_ships:
         imo_number = ship
         ship_name = dic_for_ships[ship]
@@ -60,38 +58,35 @@ def add_data_in_ships(engine, dic_for_ships):
         update_ts = datetime.now(UTC)
         ins = ships.insert().values(IMO_number=imo_number, ship_name=ship_name, create_ts=create_ts, update_ts=update_ts)
         session.execute(ins)
-    session.commit()
-    session.close()
 
 
-def add_data_in_loc(engine, data):
-    Session = sessionmaker(bind=engine)
-    session = Session()
+def add_data_in_loc(session, data):
     for index, row in data.iterrows():
         imo_number = row['IMO number']
         latitude = row['latitude']
         longitude = row['longitude']
         timestamp_string = row['timestamp']
         timestamp = parser.parse(timestamp_string)
-        ins = locations.insert().values(id=uuid.uuid4(), IMO_number=imo_number, latitude=latitude, longitude=longitude,
-                                    timestamp=timestamp)
+        ins = locations.insert().values(id=uuid.uuid4(), IMO_number=imo_number, latitude=latitude, longitude=longitude, timestamp=timestamp)
         session.execute(ins)
-    session.commit()
-    session.close()
 
 
-def add_data():
-    engine = create_engine_postgress()
+def add_data(session, engine):
     dic_for_ships = {
         9632179: "Mathilde Maersk",
         9247455: "Australian Spirit",
         9595321: "MSC Preziosa"
     }
     data = pd.read_csv("./data.csv")
-    add_data_in_ships(engine, dic_for_ships)
-    add_data_in_loc(engine, data)
+    with session.begin():
+        add_data_in_ships(session, dic_for_ships)
+        add_data_in_loc(session, data)
 
 
 if __name__ == "__main__":
-    create_table()
-    add_data()
+    engine = create_engine_postgres()
+    init_database(engine)
+
+    Session = sessionmaker(bind=engine)
+    with Session() as session:
+        add_data(session, engine)
