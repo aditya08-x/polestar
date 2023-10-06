@@ -2,10 +2,10 @@ from polestar import app, initialize_db
 import os
 
 if __name__ == '__main__':
-    postgres_user = os.getenv('postgres_user', 'postgres')
-    postgres_password = os.getenv('postgres_password', 'password')
-    postgres_host = os.getenv('postgres_host', 'localhost')
-    postgres_port = os.getenv('postgres_port', '5433')
-    postgres_db = os.getenv('postgres_db', 'polestar')
+    postgres_user = os.getenv('POSTGRES_USER', 'postgres')
+    postgres_password = os.getenv('POSTGRES_PASSWORD', 'password')
+    postgres_host = os.getenv('POSTGRES_HOST', 'localhost')
+    postgres_port = os.getenv('POSTGRES_PORT', '5433')
+    postgres_db = os.getenv('POSTGRES_DB', 'polestar')
     initialize_db(postgres_user, postgres_password, postgres_host, postgres_port, postgres_db)
-    app.run(debug=True, port=os.getenv('app_port', '5001'), host=os.getenv('app_host', '127.0.0.1'))
+    app.run(debug=True, port=os.getenv('APP_PORT', '5001'), host=os.getenv('APP_HOST', '127.0.0.1'))

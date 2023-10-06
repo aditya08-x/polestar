@@ -54,11 +54,11 @@ def add_data_in_ships(engine, dic_for_ships):
     Session = sessionmaker(bind=engine)
     session = Session()
     for ship in dic_for_ships:
-        IMO_number = ship
+        imo_number = ship
         ship_name = dic_for_ships[ship]
         create_ts = datetime.now(UTC)
         update_ts = datetime.now(UTC)
-        ins = ships.insert().values(IMO_number=IMO_number, ship_name=ship_name, create_ts=create_ts, update_ts=update_ts)
+        ins = ships.insert().values(IMO_number=imo_number, ship_name=ship_name, create_ts=create_ts, update_ts=update_ts)
         session.execute(ins)
     session.commit()
     session.close()
@@ -68,12 +68,12 @@ def add_data_in_loc(engine, data):
     Session = sessionmaker(bind=engine)
     session = Session()
     for index, row in data.iterrows():
-        IMO_number = row['IMO number']
+        imo_number = row['IMO number']
         latitude = row['latitude']
         longitude = row['longitude']
         timestamp_string = row['timestamp']
         timestamp = parser.parse(timestamp_string)
-        ins = locations.insert().values(id=uuid.uuid4(), IMO_number=IMO_number, latitude=latitude, longitude=longitude,
+        ins = locations.insert().values(id=uuid.uuid4(), IMO_number=imo_number, latitude=latitude, longitude=longitude,
                                     timestamp=timestamp)
         session.execute(ins)
     session.commit()
@@ -92,6 +92,6 @@ def add_data():
     add_data_in_loc(engine, data)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     create_table()
     add_data()

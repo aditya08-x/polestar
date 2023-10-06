@@ -1,5 +1,5 @@
 
-from sqlalchemy import create_engine, Table, Column, MetaData, Integer, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID
+from sqlalchemy import Table, Column, MetaData, Integer, VARCHAR, TIMESTAMP, DECIMAL, ForeignKey, UUID
 
 from pytz import timezone
 
@@ -7,6 +7,7 @@ from pytz import timezone
 UTC = timezone('UTC')
 metadata = MetaData()
 
+# Defining the ships table
 ships = Table(
     'ships',
     metadata,
@@ -16,7 +17,7 @@ ships = Table(
     Column('update_ts', TIMESTAMP, nullable=False)
 )
 
-# Define the locations table
+# Defining the locations table
 locations = Table(
     'locations',
     metadata,
